@@ -81,7 +81,8 @@ content-type: application/json
 
 # Comments API examples
 1. /api/comments/ GET
-   Response
+   
+Response
 ```
    [
   {
@@ -116,6 +117,7 @@ content-type: application/json
 ```
 
 2. /api/comments/ POST
+
 Request body
 ```
 {
@@ -144,6 +146,7 @@ Response
 ```
 
 3. /api/comments/<int:comment_id>/ PUT
+
 Request body
 ```
 {
@@ -172,4 +175,5 @@ Response
 ```
 
 4. /api/comments/<int:comment_id>/ DELETE
+   
    The response contains no body
