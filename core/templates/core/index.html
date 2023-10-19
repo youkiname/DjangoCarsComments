@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    const API_URL = "http://127.0.0.1:8000/api"
+
+    axios.get(API_URL + '/countries/')
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+</script>
+</body>
+</html>
