@@ -13,6 +13,10 @@ DATABASE_PASSWORD = 'password'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '5432'
 ```
+3. Create database tables
+```
+python manage.py migrate
+```
 
 ### Install requirements
 1. Python 3.11+
