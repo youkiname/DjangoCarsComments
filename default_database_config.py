@@ -1,5 +1,5 @@
-DATABASE_NAME = 'test'
-DATABASE_USER = 'youki'
-DATABASE_PASSWORD = '132'
+DATABASE_NAME = 'db_name'
+DATABASE_USER = 'db_user'
+DATABASE_PASSWORD = 'password'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '5432'
