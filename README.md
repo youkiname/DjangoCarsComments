@@ -79,6 +79,19 @@ content-type: application/json
  - /api/comments/<int:comment_id>/ PUT - auth required
  - /api/comments/<int:comment_id>/ DELETE - auth required
 
+# Export formats
+1. {api_url}/?format=json
+
+![Json example](/screenshots/json.png?raw=true "Json example")
+   
+3. {api_url}/?format=csv
+
+![Csv example](/screenshots/csv.png?raw=true "Csv example")
+   
+5. {api_url}/?format=xlsx
+
+![Xlsx example](/screenshots/xlsx.png?raw=true "Xlsx example")
+
 # Comments API examples
 1. /api/comments/ GET
    
