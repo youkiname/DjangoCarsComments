@@ -3,24 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
 
-    <title>Title</title>
+    <script
+			  src="https://code.jquery.com/jquery-3.7.1.min.js"
+			  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			  crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <title>CarsComments</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-md">
+  <div class="container-fluid">
+      <ul class="nav nav-underline me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link active" id="countries-link" aria-current="page" onclick="activateTab('countries')">Countries</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="brands-link" onclick="activateTab('brands')">Brands</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" id="cars-link" onclick="activateTab('cars')">Cars</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" id="comments-link" onclick="activateTab('comments')">Comments</a>
+        </li>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="login-link" onclick="activateTab('login')">LogIn</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="logout-link" onclick="logout()" hidden>Logout</a>
+        </li>
+      </ul>
+  </div>
+</nav>
 
+<main class="container" id="main-container">
+    <div id="countries">
+      <form id="add-country-form" class="mb-5" onsubmit="handleSaveForm(event, 'countries')">
+        <h4>Add new country</h4>
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="name" value="" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+
+      <h4>Countries List</h4>
+      <div id="countries-list">
+
+      </div>
+    </div>
+
+    <div id="brands" hidden>
+      <form id="add-brand-form" class="mb-5" onsubmit="handleSaveForm(event, 'brands')">
+        <h4>Add new brand</h4>
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="name" value="" required>
+          <label class="form-label">Country</label>
+          <select id="brand-form-countries" name="country_id" style="width: 100%" required>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+
+      <h4>Brands List</h4>
+      <div id="brands-list">
+
+      </div>
+    </div>
+    <div id="cars" hidden>
+      <form id="add-car-form" class="mb-5" onsubmit="handleSaveForm(event, 'cars')">
+        <h4>Add new car</h4>
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" name="name" value="" required>
+          <label class="form-label">Brand</label>
+          <select id="car-form-brands" name="brand_id" style="width: 100%" required>
+          </select>
+          <label class="form-label">Release Year:</label>
+          <input type="number" class="form-control" name="release_year" value='' required>
+          <label class="form-label">Release End Year:</label>
+          <input type="number" class="form-control" name="release_end_year" value='' required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+
+      <h4>Cars List</h4>
+      <div id="cars-list">
+
+      </div>
+    </div>
+    <div id="comments" hidden>
+      <form id="add-comment-form" class="mb-5" onsubmit="handleSaveForm(event, 'comments')">
+        <h4>Add new comment</h4>
+        <div class="mb-3">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-control" name="email" required>
+          <label class="form-label">Text</label>
+          <input type="text" class="form-control" name="text" value="" required>
+          <label class="form-label">About Car</label>
+          <select id="comment-form-cars" name="car_id" style="width: 100%" required>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+
+      <h4>Comments List</h4>
+      <div id="comments-list">
+
+      </div>
+    </div>
+    <div id="login" hidden>
+      <form id="login-form">
+        <div class="mb-3">
+          <label for="username-input" class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" id="username-input">
+        </div>
+        <div class="mb-3">
+          <label for="password-input" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" id="password-input">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="handleLoginButton()">Login</button>
+      </form>
+  </div>
+</main>
 <script>
-    const API_URL = "http://127.0.0.1:8000/api"
+    const API_URL = "/api/"
+    axios.defaults.baseURL = API_URL;
 
-    axios.get(API_URL + '/countries/')
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
+    axios.interceptors.response.use(function (response) {
+        return response;
+      }, function (error) {
+        if (error.response.status == 403) {
+          alert("Failed authentication. You must be logged in.");
+          activateTab('login');
+        } else{
+          alert(error.request.responseURL + "\n" + error.message);
+        }
+        return Promise.reject(error);
       });
+    axios.defaults.headers.common = {
+      "X-CSRFToken": Cookies.get('csrftoken'),
+    };
+
+    const tabs = {};
+    let modelForms = {};
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const mainContainer = document.getElementById('main-container');
+        const tabsContainers = Array.from(mainContainer.children);
+        tabsContainers.forEach(child => {
+            tabs[child.id] = child;
+        });
+
+        modelForms = {
+          'countries': getCountryForm,
+          'brands': getBrandForm,
+          'cars': getCarForm,
+          'comments': getCommentForm,
+        }
+        
+        applyCookieAuthToken();
+        activateTab('countries');
+
+        $('#brand-form-countries').select2({
+          ajax: {
+            url: API_URL + "countries/",
+            dataType: 'json',
+            processResults: function (data) {
+              results = data.map((country) => ({ "id": country.id, "text": country.name }))
+              return {
+                results
+              };
+            }
+          }
+        });
+
+        $('#car-form-brands').select2({
+          ajax: {
+            url: API_URL + "brands/",
+            dataType: 'json',
+            processResults: function (data) {
+              results = data.map((brand) => ({ "id": brand.id, "text": brand.name }))
+              return {
+                results
+              };
+            }
+          }
+        });
+
+        $('#comment-form-cars').select2({
+          ajax: {
+            url: API_URL + "cars/",
+            dataType: 'json',
+            processResults: function (data) {
+              results = data.map((car) => ({ "id": car.id, "text": car.name }))
+              return {
+                results
+              };
+            }
+          }
+        });
+    });
+    
+
+    function applyCookieAuthToken() {
+      if (Cookies.get('auth-token')) {
+        axios.defaults.headers.common["Authorization"] = "Token " + Cookies.get('auth-token');
+        document.getElementById('login-link').hidden = true;
+        document.getElementById('logout-link').hidden = false;
+      }
+    }
+
+    function handleLoginButton() {
+      const loginData = {
+        "username": document.getElementById("username-input").value,
+        "password": document.getElementById("password-input").value,
+      }
+      axios.post("token-auth/", loginData)
+        .then(function (response) {
+          Cookies.set('auth-token', response.data.token);
+          applyCookieAuthToken();
+          activateTab('countries');
+        })
+    }
+
+    function handleSaveForm(event, modelName) {
+      event.preventDefault();
+      const formId = event.target.id;
+      saveNew(modelName, formId);
+      const {'elements': formElements} = getFormFields(formId);
+      formElements.forEach(el => {
+        el.value = "";
+      })
+    }
+
+    function logout() {
+      Cookies.remove('auth-token');
+      delete axios.defaults.headers.common["Authorization"];
+
+      document.getElementById('login-link').hidden = false;
+      document.getElementById('logout-link').hidden = true;
+    }
+    
+    function activateTab(tabId) {
+        for (const tabKey in tabs) {
+            const link = document.getElementById(tabKey + "-link");
+            tabs[tabKey].hidden = tabId != tabKey;
+            link.classList.remove("active");
+
+            if (tabId == tabKey) {
+                link.classList.add("active");
+                updateTabChildren(tabId);
+            }
+        }
+    }
+
+    function updateTabChildren(tabId) {
+      const objectsList = document.getElementById(`${tabId}-list`);
+      objectsList.innerHTML = '';
+      axios.get(`${tabId}/`)
+      .then(function (response) {
+        response.data.forEach(objectDict => {
+          const form = modelForms[tabId](objectDict);
+          objectsList.appendChild(form);
+        });
+      })
+    }
+
+
+    function getCountryForm(countryDict) {
+      const form = document.createElement("form");
+      form.id = "country-" + countryDict.id;
+      const brandsString = countryDict.brands.map(brand => brand.name).join(", ");
+      form.innerHTML = `
+      <div class="mb-3">
+        <input type="text" class="form-control" name="name" value='${countryDict.name}' disabled>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Brands:</label>
+        <span>${brandsString}</span>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-secondary" onclick="enableFormInputs('${form.id}')">Change</button>
+        <button type="button" class="btn btn-primary" onclick="updateDatabaseObject('countries', ${countryDict.id}, '${form.id}')" hidden>Update</button>
+        <button type="button" class="btn btn-danger" onclick="deleteDatabaseObject('countries', ${countryDict.id})">Delete</button>
+      </div>
+      <hr>
+      `;
+      return form;
+    }
+
+    function getBrandForm(brandDict) {
+      const form = document.createElement("form");
+      form.id = "brand-" + brandDict.id;
+      const carsString = brandDict.cars.map(car => car.name).join(", ");
+      form.innerHTML = `
+      <div class="mb-3">
+        <input type="text" class="form-control" name="name" value='${brandDict.name}' disabled>
+        <input type="hidden" name="country_id", value='${brandDict.country_id}'>
+      </div>
+      <div class="mb-3">
+        <p>Country: ${brandDict.country.name}</p>
+        <p>Cars: ${carsString}</p>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-secondary" onclick="enableFormInputs('${form.id}')">Change</button>
+        <button type="button" class="btn btn-primary" onclick="updateDatabaseObject('brands', ${brandDict.id}, '${form.id}')" hidden>Update</button>
+        <button type="button" class="btn btn-danger" onclick="deleteDatabaseObject('brands', ${brandDict.id})">Delete</button>
+      </div>
+      <hr>
+      `;
+      return form;
+    }
+
+    function getCarForm(carDict) {
+      const form = document.createElement("form");
+      form.id = "car-" + carDict.id;
+
+      const comments = carDict.comments.map(c => `<p>${c.email}: ${c.text}</p>`).join('');
+
+      form.innerHTML = `
+      <div class="mb-3">
+        <input type="hidden" name="brand_id", value='${carDict.brand_id}'>
+
+        <input type="text" class="form-control" name="name" value='${carDict.name}' disabled>
+        <label class="form-label">Release Year:</label>
+        <input type="number" class="form-control" name="release_year" value='${carDict.release_year}' disabled>
+        <label class="form-label">Release End Year:</label>
+        <input type="number" class="form-control" name="release_end_year" value='${carDict.release_end_year}' disabled>
+      </div>
+      <div class="mb-3">
+        <p>Brand: ${carDict.brand.name}</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Comments</label>
+        ${comments}
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-secondary" onclick="enableFormInputs('${form.id}')">Change</button>
+        <button type="button" class="btn btn-primary" onclick="updateDatabaseObject('cars', ${carDict.id}, '${form.id}')" hidden>Update</button>
+        <button type="button" class="btn btn-danger" onclick="deleteDatabaseObject('cars', ${carDict.id})">Delete</button>
+      </div>
+      <hr>
+      `;
+      return form;
+    }
+
+    function getCommentForm(commentDict) {
+      const form = document.createElement("form");
+      form.id = "comment-" + commentDict.id;
+      form.innerHTML = `
+      <div class="mb-3">
+        <input type="hidden" name="car_id", value='${commentDict.car_id}'>
+
+        <label class="form-label">From:</label>
+        <input type="email" class="form-control" name="email" value='${commentDict.email}' disabled>
+        <label class="form-label">Text:</label>
+        <input type="text" class="form-control" name="text" value='${commentDict.text}' disabled>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">About Car: ${commentDict.car.name}</label>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-secondary" onclick="enableFormInputs('${form.id}')">Change</button>
+        <button type="button" class="btn btn-primary" onclick="updateDatabaseObject('comments', ${commentDict.id}, '${form.id}')" hidden>Update</button>
+        <button type="button" class="btn btn-danger" onclick="deleteDatabaseObject('comments', ${commentDict.id})">Delete</button>
+      </div>
+      <hr>
+      `;
+      return form;
+    }
+
+    function getFormFields(formId) {
+      const fields = {}
+      const formElements = Array.from(document.getElementById(formId).elements);
+      formElements.forEach(el => {
+        if (el.name) {
+          fields[el.name] = el.value;
+        }
+      })
+      return {'elements': formElements, 'fields': fields};
+    }
+
+    function updateDatabaseObject(modelName, databasePK, formId) {
+      const {'elements': formElements, 'fields': newFieldValues} = getFormFields(formId);
+      
+      axios.put(`${modelName}/${databasePK}/`, newFieldValues)
+        .then(function (response) {
+          formElements.forEach(el => {
+            el.value = response.data[el.name];
+          })
+          disableFormInputs(formId);
+        })
+    }
+
+    function deleteDatabaseObject(modelName, databasePK) {
+      axios.delete(`${modelName}/${databasePK}/`)
+        .then(function (response) {
+          updateTabChildren(modelName);
+        })
+    }
+
+    function saveNew(modelName, formId) {
+      const {fields} = getFormFields(formId);
+      axios.post(`${modelName}/`, fields)
+      .then(function (response) {
+          updateTabChildren(modelName);
+      })
+    }
+
+    function enableFormInputs(formId) {
+      const formInputs = document.querySelectorAll(`#${formId} input`);
+      const saveButton = document.querySelector(`#${formId} button.btn-primary`);
+      saveButton.hidden = false;
+      document.querySelector(`#${formId} button.btn-secondary`).hidden = true;
+      formInputs.forEach(el => {
+        el.disabled = false;
+      });
+    }
+
+    function disableFormInputs(formId) {
+      const formInputs = document.querySelectorAll(`#${formId} input`);
+      const updateButton = document.querySelector(`#${formId} button.btn-primary`);
+      updateButton.hidden = true;
+      document.querySelector(`#${formId} button.btn-secondary`).hidden = false;
+      formInputs.forEach(el => {
+        el.disabled = true;
+      });
+    }
 </script>
 </body>
 </html>

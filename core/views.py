@@ -20,24 +20,24 @@ class CommentQuestPermissions(permissions.BasePermission):
 
 
 class CountryViewSet(viewsets.ModelViewSet):
-    queryset = Country.objects.all()
+    queryset = Country.objects.all().order_by('id')
     serializer_class = CountrySerializer
     permission_classes = [permissions.IsAuthenticated|ReadOnly]
 
 
 class BrandViewSet(viewsets.ModelViewSet):
-    queryset = Brand.objects.all()
+    queryset = Brand.objects.all().order_by('id')
     serializer_class = BrandSerializer
     permission_classes = [permissions.IsAuthenticated|ReadOnly]
 
 
 class CarViewSet(viewsets.ModelViewSet):
-    queryset = Car.objects.all()
+    queryset = Car.objects.all().order_by('id')
     serializer_class = CarSerializer
     permission_classes = [permissions.IsAuthenticated|ReadOnly]
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.all().order_by('id')
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated|CommentQuestPermissions]

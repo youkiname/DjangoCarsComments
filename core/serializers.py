@@ -1,5 +1,11 @@
+import re
 from rest_framework import serializers
 from .models import Country, Brand, Car, Comment
+
+
+def validate_email_address(value):
+    if not re.search(r"^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$", value):
+        raise serializers.ValidationError({"email": "Not valid Email Address"})
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -63,6 +69,10 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'email', 'car', 'text', 'created_at', 'car_id']
         depth = 1
+
+    def validate(self, data):
+        validate_email_address(data['email'])
+        return data
 
     def create(self, validated_data):
         validated_data['car'] = validated_data['car_id']
